@@ -1,0 +1,1 @@
+This folder contains data required for AutoTrade* projects such as csv files of trade quotes from NSE website used for CsvFeedProvider

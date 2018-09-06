@@ -40,7 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="AutoTrade.DTO\AutoTrade.DTO.csproj">
+      <Project>{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}</Project>
+      <Name>AutoTrade.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="AutoTrade.FeedProvider\AutoTrade.FeedProvider.csproj">
+      <Project>{B3D51699-5B86-4350-8FD6-D7E9C6CEF976}</Project>
+      <Name>AutoTrade.FeedProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="AutoTrade.Strategy\AutoTrade.Strategy.csproj">
+      <Project>{5B18B8BB-ABDA-47A5-BDC7-602A5A6E0B47}</Project>
+      <Name>AutoTrade.Strategy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

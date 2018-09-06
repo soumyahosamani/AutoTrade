@@ -13,6 +13,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTrade.Strategy", "AutoT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTrade.DTO", "AutoTrade.DTO\AutoTrade.DTO.csproj", "{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTrade.Lib", "..\AutoTrade.Lib\AutoTrade.Lib.csproj", "{A28C1379-19C7-4360-A371-7D7A53FFF66E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoTrade.Data", "AutoTrade.Data", "{1ADC645B-0C51-4C88-AFBB-218449970368}"
+	ProjectSection(SolutionItems) = preProject
+		..\AutoTrade.Data\INFY.csv = ..\AutoTrade.Data\INFY.csv
+		..\AutoTrade.Data\MARUTI.csv = ..\AutoTrade.Data\MARUTI.csv
+		..\AutoTrade.Data\ReadMe.txt = ..\AutoTrade.Data\ReadMe.txt
+		..\AutoTrade.Data\WIPRO.csv = ..\AutoTrade.Data\WIPRO.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +49,10 @@ Global
 		{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A28C1379-19C7-4360-A371-7D7A53FFF66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28C1379-19C7-4360-A371-7D7A53FFF66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28C1379-19C7-4360-A371-7D7A53FFF66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28C1379-19C7-4360-A371-7D7A53FFF66E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

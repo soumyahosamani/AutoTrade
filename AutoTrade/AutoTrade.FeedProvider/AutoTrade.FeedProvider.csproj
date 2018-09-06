@@ -43,12 +43,20 @@
     <Compile Include="CsvFeedProvider.cs" />
     <Compile Include="IFeedProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TickEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AutoTrade.Lib\AutoTrade.Lib.csproj">
+      <Project>{A28C1379-19C7-4360-A371-7D7A53FFF66E}</Project>
+      <Name>AutoTrade.Lib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AutoTrade.DTO\AutoTrade.DTO.csproj">
       <Project>{e1a1f86b-43dd-479d-ad23-4f7fe25beaed}</Project>
       <Name>AutoTrade.DTO</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

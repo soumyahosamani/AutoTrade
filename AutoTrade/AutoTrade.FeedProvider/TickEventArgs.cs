@@ -1,10 +1,11 @@
-﻿using System;
+﻿using AutoTrade.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoTrade.DTO
+namespace AutoTrade.FeedProvider
 {
     public class TickEventArgs : EventArgs
     {
