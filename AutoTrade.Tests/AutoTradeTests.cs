@@ -5,6 +5,7 @@ using AutoTrade.Strategy;
 using AutoTrade.DTO;
 using AutoTrade.FeedProvider;
 using System.Threading;
+using Unity;
 
 namespace AutoTrade.Tests
 {
@@ -31,15 +32,19 @@ namespace AutoTrade.Tests
             strategy1 = new Mock<IStrategy>();
             strategy1.Setup(s => s.Name).Returns("strategy1");
             strategy1.Setup(s => s.Symbol).Returns(symbol1);
-            strategy1.Setup(s => s.OnTick(tick1)).Verifiable();
+            strategy1.Setup(s => s.OnTick(tick1)).Verifiable(); // wont work for me as feed wont generate tick 1
+            strategy1.Setup(s => s.OnTick(It.IsAny<Tick>())).Verifiable(); // throwing mock exception
+            strategy1.Setup(s => s.OnTick(It.IsNotNull<Tick>())).Verifiable(); // throwing mock exception
 
             strategy2 = new Mock<IStrategy>();
             strategy2.Setup(s => s.Name).Returns("strategy2");
             strategy2.Setup(s => s.Symbol).Returns(symbol2);
             strategy2.Setup(s => s.OnTick(tick2)).Verifiable();
 
-            IFeedProvider feedProvider = new CsvFeedProvider();
-            dataFeed = new DataFeed(feedProvider);
+
+            IUnityContainer container = new UnityContainer();            
+            container.RegisterType<IFeedProvider, CsvFeedProvider>();           
+            dataFeed = new DataFeed(container.Resolve<IFeedProvider>());
         }
 
         [TestMethod]
@@ -49,7 +54,7 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
 
             // verify if on tick was called  on strategy          
-            strategy1.Verify();
+            strategy1.Verify(s => It.IsAny<Tick>(),  Times.AtLeastOnce());// not working
 
         }
 

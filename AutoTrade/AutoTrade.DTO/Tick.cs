@@ -24,7 +24,8 @@ namespace AutoTrade.DTO
 
         public override string ToString()
         {
-            return string.Format("{0}: {1} {2} {3} ", Id, Time, Symbol, Price);
+            return base.ToString();
+            //return string.Format("{0}: {1} {2} {3} ", Id, Time, Symbol, Price);
         }
     }
 }

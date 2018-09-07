@@ -11,7 +11,6 @@ namespace AutoTrade.FeedProvider
     public interface IFeedProvider
     {
         event NewTickEventHandler NewTickEvent;
-
         void Subscribe(string Symbol);
         void Start();
         void Stop();

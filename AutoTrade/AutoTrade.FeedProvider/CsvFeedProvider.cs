@@ -8,61 +8,85 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace AutoTrade.FeedProvider
 {
     public class CsvFeedProvider : IFeedProvider
     {
         private IDictionary<string, string> filePaths = new Dictionary<string, string>();
-        private IList<string> subscribedSymbols = new List<string>();
-        protected IList<Thread> processThreads = new List<Thread>();
+        private ConcurrentBag<string> subscribedSymbols = new ConcurrentBag<string>();
+        private ConcurrentBag<Thread> processThreads = new ConcurrentBag<Thread>();
+        private bool isStarted = false;
+        private object lockObject ;
 
         public event NewTickEventHandler NewTickEvent;
 
         public CsvFeedProvider()
         {
+            lockObject = new object();
             LoadFilePaths();
-        }        
+        }
 
         public void Subscribe(string symbol)
         {
             if (subscribedSymbols.Contains(symbol) == false)
+            {
                 subscribedSymbols.Add(symbol);
+                StartFeed(symbol);
+            }
         }
 
         public void Start()
         {
-            CreateProcesThreads();
-            foreach (var thread in processThreads)
+            lock (lockObject)
             {
-                thread.Start();
-            }   
+                isStarted = true;
+            }
+
+            foreach (var symbol in subscribedSymbols)
+            {
+                StartFeed(symbol);
+            }
+
         }
 
         public void Stop()
         {
-            foreach (var thread in processThreads)
+            lock (lockObject)
             {
-                thread.Abort();
+                if (isStarted)
+                {
+                    foreach (var thread in processThreads)
+                    {
+                        thread.Abort();
+                    }
+                    isStarted = false;
+                }
             }
+
         }
 
-        private void CreateProcesThreads()
+        private void StartFeed(string symbol)
         {
-            foreach (var symbol in subscribedSymbols)
+            lock (lockObject)
             {
-                var file = filePaths.ContainsKey(symbol) ? filePaths[symbol] : null;
-                if (file != null)
+                if (isStarted)
                 {
-                    var processThread = new Thread(() => { ProcessCsv(file); });
-                    processThread.Name = "csv_" + symbol;
-                    processThread.IsBackground = false;
-                    processThreads.Add(processThread);
+                    var file = filePaths.ContainsKey(symbol) ? filePaths[symbol] : null;
+                    if (file != null)
+                    {
+                        var processThread = new Thread(() => { ProcessCsvFile(file); });
+                        processThread.Name = symbol;
+                        processThread.IsBackground = false;
+                        processThreads.Add(processThread);
+                        processThread.Start();
+                    }
                 }
             }
         }
 
-        private void ProcessCsv(string file)
+        private void ProcessCsvFile(string file)
         {
             var randomNumber = Randomizer.GetRandomNumber(1, 5);
             // handle concern of file being held open for such a long time?? or keeping entire csv data in memory which  is better?
@@ -79,7 +103,7 @@ namespace AutoTrade.FeedProvider
                 }
 
                 Console.WriteLine("Thread {0} {1} Sleeping for {2} s", Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name, randomNumber / 1000);
-                Thread.Sleep(randomNumber);
+                //Thread.Sleep(randomNumber);
                 var temp = quote.Split(',');
                 var tick = new Tick(tickId, temp[0].Trim('"'), double.Parse(temp[8].Trim('"')), DateTime.Parse(temp[2].Trim('\"')));
                 RaiseNewTickEvent(tick);
@@ -89,8 +113,8 @@ namespace AutoTrade.FeedProvider
 
         private void LoadFilePaths()
         {
-            var baseFolder = ConfigurationSettings.AppSettings["CsvProviderFolder"];
-            var symbols = ConfigurationSettings.AppSettings["Symbols"].Split(',');
+            var baseFolder = ConfigurationManager.AppSettings["CsvProviderFolder"];
+            var symbols = ConfigurationManager.AppSettings["Symbols"].Split(',');
             foreach (var symbol in symbols)
             {
                 filePaths[symbol] = (Path.Combine(baseFolder, symbol + ".csv"));

@@ -11,27 +11,28 @@ using System.Threading.Tasks;
 
 namespace AutoTrade
 {
-    public class DataFeed : IDisposable
+    public class DataFeed 
     {
         private BlockingCollection<Tick> queue = new BlockingCollection<Tick>();
-        
+
         private IList<IStrategy> subscribers = new List<IStrategy>();
-        private Thread processThread;
-        private int previousTickId = 0;
+        private Thread processTicksThread;
+        private int previousTickId = 0;//potential risk in multithreaded environment???? need to check
 
-        private bool started = false;
 
+        //constructor
         public DataFeed(IFeedProvider feedProvider)
         {
             this.FeedProvider = feedProvider;
             FeedProvider.NewTickEvent += OnNewTick;
+            Start();
+        }
 
-            lock (this)
-            {
-                Start();
-                started = true;
-            }
 
+        //destructor
+        ~DataFeed()
+        {
+            Stop();
         }
 
         public IFeedProvider FeedProvider { get; private set; }
@@ -62,14 +63,13 @@ namespace AutoTrade
         {
             FeedProvider.Stop();
             Console.WriteLine("Stopping Processing thread");
-            processThread.Abort();
+            processTicksThread.Abort();
         }
 
         private void OnNewTick(object sender, TickEventArgs e)
         {
             queue.Add(e.Tick);
         }
-
 
         private Tick GetNextTick()
         {
@@ -109,20 +109,10 @@ namespace AutoTrade
 
         private void StartProcessTicks()
         {
-            processThread = new Thread(ProcessTicks);
-            processThread.IsBackground = false;
+            processTicksThread = new Thread(ProcessTicks);
+            processTicksThread.IsBackground = false;
             Console.WriteLine("Starting Processing feed ");
-            processThread.Start();
-        }
-
-        public void Dispose()
-        {
-            lock (this)
-            {
-                if (started)
-                    Stop();
-            }
-        }
-
+            processTicksThread.Start();
+        }        
     }
 }
