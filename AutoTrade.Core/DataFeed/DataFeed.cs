@@ -1,6 +1,5 @@
-﻿using AutoTrade.DTO;
-using AutoTrade.FeedProvider;
-using AutoTrade.Strategy;
+﻿using AutoTrade.Core.FeedProvider;
+using AutoTrade.Core.Strategy;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,12 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using System.Collections.Generic;
-
-
-namespace AutoTrade
+namespace AutoTrade.Core.DataFeed
 {
-    public class DataFeed 
+    public class DataFeed
     {
         private BlockingCollection<Tick> queue = new BlockingCollection<Tick>();
 
@@ -116,6 +112,6 @@ namespace AutoTrade
             processTicksThread.IsBackground = false;
             Console.WriteLine("Starting Processing feed ");
             processTicksThread.Start();
-        }        
+        }
     }
 }

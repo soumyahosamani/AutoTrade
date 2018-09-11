@@ -105,26 +105,14 @@
     <Compile Include="AutoTradeTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoTrade\AutoTrade.csproj">
-      <Project>{949a36df-f509-466e-b4a9-b27bc281c97f}</Project>
-      <Name>AutoTrade</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoTrade\AutoTrade.DTO\AutoTrade.DTO.csproj">
-      <Project>{E1A1F86B-43DD-479D-AD23-4F7FE25BEAED}</Project>
-      <Name>AutoTrade.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoTrade\AutoTrade.FeedProvider\AutoTrade.FeedProvider.csproj">
-      <Project>{B3D51699-5B86-4350-8FD6-D7E9C6CEF976}</Project>
-      <Name>AutoTrade.FeedProvider</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoTrade\AutoTrade.Strategy\AutoTrade.Strategy.csproj">
-      <Project>{5B18B8BB-ABDA-47A5-BDC7-602A5A6E0B47}</Project>
-      <Name>AutoTrade.Strategy</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoTrade.Core\AutoTrade.Core.csproj">
+      <Project>{007A2969-8CA3-44D5-B463-D24E684EC949}</Project>
+      <Name>AutoTrade.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

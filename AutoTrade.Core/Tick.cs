@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoTrade.DTO
+namespace AutoTrade.Core
 {
-    public class Tick :IEqualityComparer<Tick>
+    public class Tick : IEqualityComparer<Tick>
     {
         public double Price;
         public DateTime Time;
@@ -28,7 +28,7 @@ namespace AutoTrade.DTO
             //return string.Format("{0}: {1} {2} {3} ", Id, Time, Symbol, Price);
         }
 
-        
+
         public bool Equals(Tick x, Tick y)
         {
             if (x == null && y != null)

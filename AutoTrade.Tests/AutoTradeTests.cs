@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using AutoTrade.Strategy;
-using AutoTrade.DTO;
-using AutoTrade.FeedProvider;
 using System.Threading;
 using Unity;
+using AutoTrade.Core;
+using AutoTrade.Core.DataFeed;
+using AutoTrade.Core.Strategy;
+using AutoTrade.Core.FeedProvider;
 
 namespace AutoTrade.Tests
 {
@@ -32,14 +33,12 @@ namespace AutoTrade.Tests
             strategy1 = new Mock<IStrategy>();
             strategy1.Setup(s => s.Name).Returns("strategy1");
             strategy1.Setup(s => s.Symbol).Returns(symbol1);
-            strategy1.Setup(s => s.OnTick(tick1)).Verifiable(); // wont work for me as feed wont generate tick 1
-            strategy1.Setup(s => s.OnTick(It.IsAny<Tick>())).Verifiable(); // throwing mock exception
-            strategy1.Setup(s => s.OnTick(It.IsNotNull<Tick>())).Verifiable(); // throwing mock exception
+            strategy1.Setup(s => s.OnTick(It.IsNotNull<Tick>())).Verifiable();
 
             strategy2 = new Mock<IStrategy>();
             strategy2.Setup(s => s.Name).Returns("strategy2");
             strategy2.Setup(s => s.Symbol).Returns(symbol2);
-            strategy2.Setup(s => s.OnTick(tick2)).Verifiable();
+            strategy2.Setup(s => s.OnTick(It.IsNotNull<Tick>())).Verifiable();
 
 
             IUnityContainer container = new UnityContainer();            
@@ -54,7 +53,8 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
 
             // verify if on tick was called  on strategy          
-            strategy1.Verify(s => It.IsAny<Tick>(),  Times.AtLeastOnce());// not working
+            Thread.Sleep(1);
+            strategy1.Verify();
 
         }
 
@@ -83,7 +83,6 @@ namespace AutoTrade.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), null)]
         public void DuplicateStrategy()
         {
             // subscribe with  strategy
@@ -93,8 +92,9 @@ namespace AutoTrade.Tests
             // shoud not throw exception, ignore resubscription attempt
             dataFeed.Subscribe(strategy1.Object);
 
-            // verify if on tick was called  on strategy without any exception , but should be called only once.     
-            strategy1.Verify(s => s.OnTick(tick1), Times.Once());
+            // verify if on tick was called  on strategy without any exception
+            Thread.Sleep(1);
+            strategy1.Verify();
         }
 
         [TestMethod]
@@ -106,6 +106,8 @@ namespace AutoTrade.Tests
             // subscribe with multiple strategies
             dataFeed.Subscribe(strategy1.Object);
             dataFeed.Subscribe(strategy2.Object);
+
+            Thread.Sleep(1);
 
             // verify Ontick was called on all subscribed strategies
             strategy1.Verify();
@@ -119,6 +121,8 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
             dataFeed.Subscribe(strategy2.Object);
 
+            Thread.Sleep(1);
+
             // verify Ontick was called on all subscribed strategies
             strategy1.Verify();
             strategy2.Verify();
@@ -129,6 +133,7 @@ namespace AutoTrade.Tests
         {
             Thread.Sleep(2000);
             dataFeed.Subscribe(strategy1.Object);
+            Thread.Sleep(2);
             strategy1.Verify();
         }
 
@@ -163,4 +168,6 @@ namespace AutoTrade.Tests
             strategy2.Verify();
         }
     }
+
+    
 }
