@@ -7,6 +7,7 @@ using AutoTrade.Core;
 using AutoTrade.Core.DataFeed;
 using AutoTrade.Core.Strategy;
 using AutoTrade.Core.FeedProvider;
+using AutoTrade.FeedProvider.CSV;
 
 namespace AutoTrade.Tests
 {
@@ -53,7 +54,7 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
 
             // verify if on tick was called  on strategy          
-            Thread.Sleep(1);
+            Thread.Sleep(2);
             strategy1.Verify();
 
         }
@@ -133,7 +134,7 @@ namespace AutoTrade.Tests
         {
             Thread.Sleep(2000);
             dataFeed.Subscribe(strategy1.Object);
-            Thread.Sleep(2);
+            Thread.Sleep(3);
             strategy1.Verify();
         }
 
@@ -166,6 +167,9 @@ namespace AutoTrade.Tests
 
             strategy1.Verify();
             strategy2.Verify();
+
+            thread1.Abort();
+            thread2.Abort();
         }
     }
 

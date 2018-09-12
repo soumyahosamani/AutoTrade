@@ -1,6 +1,8 @@
-﻿using AutoTrade.DTO;
-using AutoTrade.Lib;
+﻿using AutoTrade.Core;
+using AutoTrade.Core.FeedProvider;
+using AutoTrade.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -8,9 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
-namespace AutoTrade.FeedProvider
+namespace AutoTrade.FeedProvider.CSV
 {
     public class CsvFeedProvider : IFeedProvider
     {
@@ -18,7 +19,7 @@ namespace AutoTrade.FeedProvider
         private ConcurrentBag<string> subscribedSymbols = new ConcurrentBag<string>();
         private ConcurrentBag<Thread> processThreads = new ConcurrentBag<Thread>();
         private bool isStarted = false;
-        private object lockObject ;
+        private object lockObject;
 
         public event NewTickEventHandler NewTickEvent;
 

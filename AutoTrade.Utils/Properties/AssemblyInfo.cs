@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AutoTrade.FeedProvider")]
+[assembly: AssemblyTitle("AutoTrade.Utils")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AutoTrade.FeedProvider")]
+[assembly: AssemblyProduct("AutoTrade.Utils")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b3d51699-5b86-4350-8fd6-d7e9c6cef976")]
+[assembly: Guid("48b0e721-5877-4b83-ba89-e04b3f2c9c8b")]
 
 // Version information for an assembly consists of the following four values:
 //
