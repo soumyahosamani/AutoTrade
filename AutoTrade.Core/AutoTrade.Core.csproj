@@ -41,11 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFeed\DataFeed.cs" />
+    <Compile Include="DataFeed\FeedAggregator.cs" />
+    <Compile Include="Entites\Tick.cs" />
     <Compile Include="FeedProvider\IFeedProvider.cs" />
-    <Compile Include="FeedProvider\TickEventArgs.cs" />
+    <Compile Include="DataFeed\TickEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategy\IStrategy.cs" />
-    <Compile Include="Tick.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoTrade.Utils\AutoTrade.Utils.csproj">
+      <Project>{48B0E721-5877-4B83-BA89-E04B3F2C9C8B}</Project>
+      <Name>AutoTrade.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,6 @@
-﻿using AutoTrade.Core.FeedProvider;
+﻿using AutoTrade.Core;
+using AutoTrade.Core.Entites;
+using AutoTrade.Core.FeedProvider;
 using AutoTrade.Core.Strategy;
 using System;
 using System.Collections.Concurrent;
@@ -20,10 +22,10 @@ namespace AutoTrade.Core.DataFeed
 
 
         //constructor
-        public DataFeed(IFeedProvider feedProvider)
+        public DataFeed(FeedAggregator feedAggregator)
         {
-            this.FeedProvider = feedProvider;
-            FeedProvider.NewTickEvent += OnNewTick;
+            this.FeedAggregator = feedAggregator;
+            FeedAggregator.NewTickEvent += OnNewTick;
             Start();
         }
 
@@ -34,7 +36,7 @@ namespace AutoTrade.Core.DataFeed
             Stop();
         }
 
-        public IFeedProvider FeedProvider { get; private set; }
+        public FeedAggregator FeedAggregator { get; private set; }
         public void Subscribe(IStrategy strategy)
         {
             if (subscribers.Contains(strategy) == false)
@@ -48,19 +50,23 @@ namespace AutoTrade.Core.DataFeed
                     throw new ArgumentNullException("Symbol", "Symbol is not provided for Strategy" + strategy.Name);
                 }
                 subscribers.Add(strategy);
-                FeedProvider.Subscribe(strategy.Symbol);
+                FeedAggregator.Subscribe(strategy.Symbol);
             }
         }
 
         private void Start()
         {
-            FeedProvider.Start();
             StartProcessTicks();
         }
 
         private void Stop()
         {
-            FeedProvider.Stop();
+            // unsubscribe
+            foreach (var subscriber in this.subscribers)
+            {
+                FeedAggregator.UnSubscribe(subscriber.Symbol);
+            }
+
             Console.WriteLine("Stopping Processing thread");
             processTicksThread.Abort();
         }

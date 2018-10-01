@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoTrade.Core
+namespace AutoTrade.Core.Entites
 {
     public class Tick : IEqualityComparer<Tick>
     {

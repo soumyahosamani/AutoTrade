@@ -13,85 +13,23 @@ using System.Threading.Tasks;
 
 namespace AutoTrade.FeedProvider.CSV
 {
-    public class CsvFeedProvider : IFeedProvider
+    public class CsvFeedProvider
     {
-        private IDictionary<string, string> filePaths = new Dictionary<string, string>();
-        private ConcurrentBag<string> subscribedSymbols = new ConcurrentBag<string>();
-        private ConcurrentBag<Thread> processThreads = new ConcurrentBag<Thread>();
-        private bool isStarted = false;
-        private object lockObject;
-
+        private string filePath;
+        private string symbol; 
+        
         public event NewTickEventHandler NewTickEvent;
 
-        public CsvFeedProvider()
+        public CsvFeedProvider(string symbol)
         {
-            lockObject = new object();
-            LoadFilePaths();
+            this.symbol = symbol;
+            LoadFilePath();
         }
-
-        public void Subscribe(string symbol)
-        {
-            if (subscribedSymbols.Contains(symbol) == false)
-            {
-                subscribedSymbols.Add(symbol);
-                StartFeed(symbol);
-            }
-        }
-
-        public void Start()
-        {
-            lock (lockObject)
-            {
-                isStarted = true;
-            }
-
-            foreach (var symbol in subscribedSymbols)
-            {
-                StartFeed(symbol);
-            }
-
-        }
-
-        public void Stop()
-        {
-            lock (lockObject)
-            {
-                if (isStarted)
-                {
-                    foreach (var thread in processThreads)
-                    {
-                        thread.Abort();
-                    }
-                    isStarted = false;
-                }
-            }
-
-        }
-
-        private void StartFeed(string symbol)
-        {
-            lock (lockObject)
-            {
-                if (isStarted)
-                {
-                    var file = filePaths.ContainsKey(symbol) ? filePaths[symbol] : null;
-                    if (file != null)
-                    {
-                        var processThread = new Thread(() => { ProcessCsvFile(file); });
-                        processThread.Name = symbol;
-                        processThread.IsBackground = false;
-                        processThreads.Add(processThread);
-                        processThread.Start();
-                    }
-                }
-            }
-        }
-
-        private void ProcessCsvFile(string file)
+        public void ProcessCsvFile()
         {
             var randomNumber = Randomizer.GetRandomNumber(1, 5);
             // handle concern of file being held open for such a long time?? or keeping entire csv data in memory which  is better?
-            var quotes = File.ReadAllLines(file);
+            var quotes = File.ReadAllLines(filePath);
             int tickId = 0;
 
             foreach (var quote in quotes)
@@ -112,19 +50,34 @@ namespace AutoTrade.FeedProvider.CSV
             }
         }
 
-        private void LoadFilePaths()
+        private void LoadFilePath()
         {
             var baseFolder = ConfigurationManager.AppSettings["CsvProviderFolder"];
-            var symbols = ConfigurationManager.AppSettings["Symbols"].Split(',');
-            foreach (var symbol in symbols)
-            {
-                filePaths[symbol] = (Path.Combine(baseFolder, symbol + ".csv"));
-            }
+            symbol = ConfigurationManager.AppSettings["Symbol"];
+            filePath = (Path.Combine(baseFolder, symbol + ".csv"));
         }
 
         private void RaiseNewTickEvent(Tick tick)
         {
             NewTickEvent?.Invoke(this, new TickEventArgs(tick));
+        }
+    }
+
+    public class AbstractFeedProvider : IFeedProvider
+    {
+        // list of subscribes for which i have start the feed 
+        public event NewTickEventHandler NewTickEvent;
+
+        
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Subscribe(string Symbol)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,7 +7,10 @@ using AutoTrade.Core;
 using AutoTrade.Core.DataFeed;
 using AutoTrade.Core.Strategy;
 using AutoTrade.Core.FeedProvider;
-using AutoTrade.FeedProvider.CSV;
+using Unity.Resolution;
+using System.Collections.Generic;
+using AutoTrade.Core.Entites;
+using AutoTrade.Csv.FeedProvider;
 
 namespace AutoTrade.Tests
 {
@@ -43,8 +46,14 @@ namespace AutoTrade.Tests
 
 
             IUnityContainer container = new UnityContainer();            
-            container.RegisterType<IFeedProvider, CsvFeedProvider>();           
-            dataFeed = new DataFeed(container.Resolve<IFeedProvider>());
+            container.RegisterType<IFeedProvider, CsvFeedProvider>();
+            List<IFeedProvider> feedProviders = new List<IFeedProvider>();
+            var symbol1FeedProvider = container.Resolve<IFeedProvider>(new ResolverOverride[] { new ParameterOverride("symbol", symbol1) });
+            var symbol2FeedProvider = container.Resolve<IFeedProvider>(new ResolverOverride[] { new ParameterOverride("symbol", symbol2) });
+            feedProviders.Add(symbol1FeedProvider);
+            feedProviders.Add(symbol2FeedProvider);
+            FeedAggregator feedAggregator = new FeedAggregator(feedProviders);
+            dataFeed = new DataFeed(feedAggregator);
         }
 
         [TestMethod]
@@ -68,8 +77,6 @@ namespace AutoTrade.Tests
 
             // subscribe strategy. Should throw exception
             dataFeed.Subscribe(strategy1.Object);
-
-            //strategy1.Setup(s => s.Symbol).Returns(symbol1);
         }
 
         [TestMethod]
@@ -108,7 +115,7 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
             dataFeed.Subscribe(strategy2.Object);
 
-            Thread.Sleep(1);
+            Thread.Sleep(2);
 
             // verify Ontick was called on all subscribed strategies
             strategy1.Verify();
@@ -122,7 +129,7 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
             dataFeed.Subscribe(strategy2.Object);
 
-            Thread.Sleep(1);
+            Thread.Sleep(2);
 
             // verify Ontick was called on all subscribed strategies
             strategy1.Verify();
@@ -134,13 +141,14 @@ namespace AutoTrade.Tests
         {
             Thread.Sleep(2000);
             dataFeed.Subscribe(strategy1.Object);
-            Thread.Sleep(3);
+            Thread.Sleep(4);
             strategy1.Verify();
         }
 
 
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void SubscrbieToInvalidCompany()
         {
             // change symbol to invalid value
@@ -149,7 +157,7 @@ namespace AutoTrade.Tests
             dataFeed.Subscribe(strategy1.Object);
 
             // verify if on tick was never called            
-            strategy1.Verify(s => s.OnTick(tick1), Times.Never());
+            //strategy1.Verify(s => s.OnTick(tick1), Times.Never());
         }
         
 

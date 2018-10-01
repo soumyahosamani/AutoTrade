@@ -113,9 +113,9 @@
       <Project>{007A2969-8CA3-44D5-B463-D24E684EC949}</Project>
       <Name>AutoTrade.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutoTrade.FeedProvider\AutoTrade.FeedProvider.csproj">
-      <Project>{A1C6FAE0-8767-47C7-991D-8DA8BA368217}</Project>
-      <Name>AutoTrade.FeedProvider</Name>
+    <ProjectReference Include="..\AutoTrade.Csv.FeedProvider\AutoTrade.Csv.FeedProvider.csproj">
+      <Project>{44D2DEC2-6B13-4F6F-9C5C-BC14B3966338}</Project>
+      <Name>AutoTrade.Csv.FeedProvider</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

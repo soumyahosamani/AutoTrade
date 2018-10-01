@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoTrade.Core.Entites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

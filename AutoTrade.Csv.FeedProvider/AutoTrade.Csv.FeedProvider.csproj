@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A1C6FAE0-8767-47C7-991D-8DA8BA368217}</ProjectGuid>
+    <ProjectGuid>{44D2DEC2-6B13-4F6F-9C5C-BC14B3966338}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoTrade.FeedProvider</RootNamespace>
-    <AssemblyName>AutoTrade.FeedProvider</AssemblyName>
+    <RootNamespace>AutoTrade.Csv.FeedProvider</RootNamespace>
+    <AssemblyName>AutoTrade.Csv.FeedProvider</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,17 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CSV\CsvFeedProvider.cs" />
+    <Compile Include="CsvFeedProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoTrade.Core\AutoTrade.Core.csproj">
       <Project>{007A2969-8CA3-44D5-B463-D24E684EC949}</Project>
       <Name>AutoTrade.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoTrade.Utils\AutoTrade.Utils.csproj">
-      <Project>{48B0E721-5877-4B83-BA89-E04B3F2C9C8B}</Project>
-      <Name>AutoTrade.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
